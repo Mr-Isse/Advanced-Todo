@@ -1,66 +1,109 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import TodoModel from './TodoModel';
 
 const TodoTable = () => {
-  // const tasks = [
-  //   { id: 1, name: "Fix Authentication Bug", priority: "High", date: "Jan 12", status: "Ongoing" },
-  //   { id: 2, name: "Design System Update", priority: "Medium", date: "Jan 15", status: "Pending" },
-  //   { id: 3, name: "API Integration", priority: "Low", date: "Jan 18", status: "Completed" },
-  // ];
-  const[tasks,setTask]=useState([]);
-  const userId=localStorage.getItem('UserId')
-  const username=localStorage.getItem('username')
+  const [searchTerm, setSearchTerm] = useState(""); // Qoraalka la qorayo
+const [filterStatus, setFilterStatus] = useState("all"); // Status-ka la dooranayo
 
-  useEffect(()=>{
-    const fetchTodo=async()=>{
-      const {data}=await axios.get('/api/todo/getTodo',userId)
-      setTask(data)
+  const [tasks, setTask] = useState([]);
+  const [selectedTodo, setSelectedTodo] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  
+  const userId = localStorage.getItem('UserId');
+
+  useEffect(() => {
+    const fetchTodo = async () => {
+      try {
+        const { data } = await axios.get('/api/todo/getTodo', {
+          params: { userId } 
+        });
+        setTask(data);
+      } catch (error) {
+        console.error("Xogta lama soo heli karo", error);
+      }
+    };
+    if (userId) fetchTodo();
+  }, [userId]);
+
+  // // 2. Marka Edit la riixdo
+  // const handleEditClick = (todo) => {
+  //   setSelectedTodo(todo);
+  //   setIsEditModalOpen(true);
+  // };
+
+  
+  const delteTodo = async (id) => {
+    if (window.confirm("Ma hubtaa inaad tirtirto?")) {
+      try {
+        await axios.delete(`/api/todo/deleteTodo/${id}`);
+        setTask(tasks.filter(t => t._id !== id)); 
+        toast.success("Deleted Successfully");
+      } catch (error) {
+        toast.error("Wuu diiday inuu tirtirmo");
+      }
     }
-    fetchTodo()
-  },[userId])
+  };
 
-  const delteTodo=async(id)=>{
-    const data=await axios.delete(`/api/todo/deleteTodo/${id}`)
-    toast.success("Deleted Success fully")
-  }
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <TodoModel 
+        isOpen={isEditModalOpen} 
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedTodo(null); 
+        }} 
+        editData={selectedTodo} 
+      />
+
       <div className="p-6 flex justify-between items-center border-b border-gray-50">
         <h3 className="font-bold text-gray-800 text-lg">Current Assignments</h3>
-        <button className="text-indigo-600 text-sm font-semibold hover:underline">View All</button>
       </div>
+
       <div className="overflow-x-auto">
         <table className="w-full text-left">
-          <thead className="bg-gray-50/50 text-gray-400 text-[11px] uppercase tracking-widest font-bold">
+          <thead className="bg-gray-50/50 text-gray-400 text-[11px] uppercase font-bold">
             <tr>
-              <th className="p-4">title</th>
-              <th className="p-4">description</th>
+              <th className="p-4">Title</th>
+              <th className="p-4">Description</th>
               <th className="p-4">Status</th>
-              <th className="p-4">Action</th>
+              <th className="p-4 text-center">Action</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
             {tasks.map((task) => (
-              <tr key={task._id} className="hover:bg-gray-50/80 transition group">
-                <td className="p-4">
-                  <span className={`px-3 py-1 rounded-full text-md font-black  ${
-                    task.title === 'High' ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600'
-                  }`}>
-                    {task.title}
-                  </span>
-                </td>
+              <tr key={task._id} className="hover:bg-gray-50/80 transition">
+                <td className="p-4 font-medium text-gray-900">{task.title}</td>
                 <td className="p-4 text-sm text-gray-500">{task.description}</td>
                 <td className="p-4">
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${task.status==="pending" ? "bg-indigo-500 animate-pulse cursor-pointer":""} ${task.status==="in-progress" ? "bg-yellow-500 animate-pulse ": ""} ${task.status==="completed"? "bg-green-500 animate-pulse ": ""}`}></div>
-                    <span className={`text-sm font-medium ${task.status==="pending" ?"text-indigo-600 cursor-pointer": ""} ${task.status==="in-progress"? "text-yellow-500 cursor-pointer":""} ${task.status=== "completed"? "text-green-600 cursor-pointer": ""}`}>{task.status}</span>
+                    <div className={`w-2 h-2 rounded-full ${
+                      task.status === "pending" ? "bg-indigo-500" : 
+                      task.status === "in-progress" ? "bg-yellow-500" : "bg-green-500"
+                    } animate-pulse`}></div>
+                    <span className="text-sm capitalize">{task.status}</span>
                   </div>
                 </td>
-                <div className='flex space-x-3'>
-                  <button className='bg-indigo-700 cursor-pointer p-2 text-white' >Edit</button>
-                  <button className='bg-red-600 cursor-pointer p-2 text-white' onClick={()=>delteTodo(task._id)}>Delete</button>
-                </div>
+                <td className="p-4">
+                  <div className='flex justify-center space-x-2'>
+                    <button 
+                    onClick={() => {
+                      setSelectedTodo(task); 
+                      setIsEditModalOpen(true);
+                    }}
+                    className="bg-indigo-700 p-2 text-white"
+                  >
+                    Edit
+                  </button>
+                    <button 
+                      onClick={() => delteTodo(task._id)}
+                      className='bg-red-100 text-red-600 px-3 py-1 rounded-lg hover:bg-red-200 transition'
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>

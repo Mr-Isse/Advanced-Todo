@@ -46,15 +46,14 @@ const Dashboard=()=> {
           </button>
         </div>
 
-        {/* Stats Section */}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
           <Statscard title="Total Tasks" count={tasks.length} color="text-indigo-600" trend="+12%" />
           <Statscard title="Ongoing" count="12" color="text-amber-600" trend="+3%" />
           <Statscard title="Finished" count="30" color="text-emerald-600" trend="+18%" />
         </div>
 
-        {/* Table Section */}
-        <TodoTable />
+        <TodoTable isOpen={isOpen} onClose={() => setIsOpen(false)}  />
       </main>
 
       <TodoModel isOpen={isOpen} onClose={() => setIsOpen(false)} />

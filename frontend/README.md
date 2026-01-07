@@ -1,16 +1,27 @@
-# React + Vite
+# 🚀 Advanced Todo App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Kani waa codsi horumarsan oo loogu talagalay maareynta howlaha maalintii (**Task Management**). Ma ahan kaliya Todo list caadi ah, balse waa nidaam kuu sahlaya inaad si hufan u nidaamiso shaqooyinkaaga adiga oo isticmaalaya sifooyin casri ah.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features (Sifooyinka)
 
-## React Compiler
+* **Task Prioritization:** Kala saar howlaha muhiimka ah (High, Medium, Low).
+* **Categories/Tags:** U sameey qaybo gaar ah sida (Work, Personal, Fitness).
+* **Due Dates:** Ku dar xilliga ay tahay in shaqada la dhameeyo.
+* **Search & Filter:** Si fudud u raadi howlaha aad rabto.
+* **Dark/Light Mode:** Naqshad indhaha u roon oo habeen iyo maalinba leh.
+* **Persistent Storage:** Xogtaadu ma lumayso xataa haddii aad bogga xirto.
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## 🛠️ Technologies Used (Tignoolajiyada)
 
-## Expanding the ESLint configuration
+* **Frontend:** [Tusaale: React.js / Next.js / HTML & CSS]
+* **Styling:** [Tusaale: Tailwind CSS / Bootstrap]
+* **State Management:** [Tusaale: Redux / Context API]
+* **Backend (Haddii uu leeyahay):** [Tusaale: Node.js / Firebase]
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Sida loo kiciyo (Installation)
+
+1. Repo-ga soo degso:
+   ```bash
+   git clone [https://github.com/username/advanced-todo-app.git](https://github.com/username/advanced-todo-app.git)
